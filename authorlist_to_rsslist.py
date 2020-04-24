@@ -1,13 +1,12 @@
 """
 A quick script for creating an OPML file with RSS (really, Atom) feeds for all the authors you want to follow on arXiv. 
-Create a list (saved as authors.csv) of the authors you'd like to follow (one on each line), with the first line as 'authorname'.
+Create a list (saved as authors.csv) of the authors you'd like to follow (one on each line).
 
-Usage: python authorlist_to_rsslist.py > opml.xml
+Usage: python authorlist_to_rsslist.py > authors.xml
 
 It creates a file that can be uploaded to many RSS readers, such as Feedly, for them to automatically populate the relevant feeds for you. 
 It is useful to keep a feed for each author loaded separately so that we can unsubscribe from individuals (if we want to) instead of having to mess with the arXiv API query every time.
 """
-
 
 import pandas as pd
 
@@ -43,7 +42,7 @@ def get_opml_lines(data: pd.Series)->pd.Series:
 
 def main():
     authors_filename = 'authors.csv'
-    author_data = pd.read_csv(authors_filename, sep='\n', dtype='str')
+    author_data = pd.read_csv('authors.csv', sep='\n', dtype=str, header=None, names=['authorname'])
     author_data['queries'] = author_data.authorname.apply(get_arxiv_query)
     opml_lines = author_data.apply(get_opml_lines,axis=1)
 
