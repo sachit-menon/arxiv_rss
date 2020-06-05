@@ -1,10 +1,13 @@
-def get_queries(author_name: str)->str:
+def get_queries(author_name: str, include_abbrev: bool = False)->str:
     author_name_list = author_name.split(' ')
     author_name_query = '+'.join(author_name_list)
-    abbrev_name = author_name.split(' ')
-    abbrev_name = [abbrev[0] if index != len(abbrev_name)-1 else abbrev for index, abbrev in enumerate(abbrev_name)]
-    abbrev_name_query = '+'.join(abbrev_name)
-    return '%22+OR+au:%22'.join([author_name_query, abbrev_name_query])
+    if include_abbrev:
+        abbrev_name = author_name.split(' ')
+        abbrev_name = [abbrev[0] if index != len(abbrev_name)-1 else abbrev for index, abbrev in enumerate(abbrev_name)]
+        abbrev_name_query = '+'.join(abbrev_name)
+        return '%22+OR+au:%22'.join([author_name_query, abbrev_name_query])
+    else:
+        return author_name_query
 
 try:
     with open('authors.csv', 'r') as f:
